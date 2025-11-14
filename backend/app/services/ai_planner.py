@@ -180,69 +180,231 @@ IMPORTANT:
         return prompt
 
     def _generate_fallback_plan(self, user: User, goal: Goal, weeks: int) -> Dict[str, Any]:
-        """Generate a basic fallback plan if AI fails"""
-        workouts_per_week = min(user.preferred_training_days, 5)
+        """Generate an intelligent, varied fallback plan if AI fails"""
+        workouts_per_week = min(user.preferred_training_days, 6)
+        is_trail = goal.race_type.value in ['trail_short', 'trail_medium', 'trail_long', 'ultra_trail']
+
+        # Define training phases
+        total_weeks = min(weeks, 16)
+        base_phase = int(total_weeks * 0.5)  # 50% base building
+        build_phase = int(total_weeks * 0.35)  # 35% specific training
+        taper_phase = total_weeks - base_phase - build_phase  # 15% taper
 
         plan = {
-            "description": f"Plan d'entraînement de base pour {goal.name}",
+            "description": f"Plan d'entraînement progressif pour {goal.name} - {total_weeks} semaines avec variété et progression",
             "weeks": []
         }
 
-        for week_num in range(1, min(weeks + 1, 13)):  # Max 12 weeks for fallback
+        # Workout templates with variety
+        interval_workouts = [
+            ("Pyramide", "intervals", "2km échauffement + 400-800-1200-800-400m (récup 90s) + 1km retour calme"),
+            ("Fractionnés courts", "intervals", "2km échauffement + 12x400m allure 5K (récup 1min) + 1km retour calme"),
+            ("Fractionnés moyens", "intervals", "2km échauffement + 6x1000m allure 10K (récup 2min) + 1km retour calme"),
+            ("Fractionnés longs", "intervals", "2km échauffement + 4x2000m allure semi (récup 3min) + 1km retour calme"),
+            ("30-30", "intervals", "2km échauffement + 3 séries de 10x(30s rapide/30s lent) récup 3min + 1km retour"),
+        ]
+
+        tempo_workouts = [
+            ("Tempo run", "tempo", "2km échauffement + 20min allure seuil (85-90% FCM) + 1km retour calme"),
+            ("Tempo progressif", "tempo", "2km échauffement + 3x10min (tempo → allure course) récup 2min + 1km retour"),
+            ("Cruise intervals", "tempo", "2km échauffement + 3x2km allure seuil récup 90s + 1km retour calme"),
+            ("Tempo long", "tempo", "2km échauffement + 30min allure marathon + 1km retour calme"),
+        ]
+
+        fartlek_workouts = [
+            ("Fartlek suédois", "fartlek", "Échauffement 15min + 30min variations (1-5min rapide/lent au feeling) + 10min cool"),
+            ("Fartlek structuré", "fartlek", "Échauffement 15min + 6x(3min tempo/2min facile) + 10min retour calme"),
+            ("Fartlek pyramide", "fartlek", "Échauffement 15min + 1-2-3-4-3-2-1min rapide (récup = durée effort) + 10min retour"),
+        ]
+
+        hill_workouts = [
+            ("Côtes courtes", "hill_repeats", "2km échauffement + 10x(45s côte forte/descente récup) + 1km retour calme"),
+            ("Côtes moyennes", "hill_repeats", "2km échauffement + 6x(2min côte progressive/descente lente) + 1km retour"),
+            ("Côtes longues", "hill_repeats", "2km échauffement + 4x(4min côte régulière/descente récup) + 1km retour calme"),
+        ]
+
+        progression_workouts = [
+            ("Progression run", "progression", "10km en accélérant progressivement du rythme facile au tempo"),
+            ("Finish strong", "progression", "12km : 8km facile + 4km à allure objectif"),
+            ("Negative split", "progression", "14km : 1ère moitié facile, 2nde moitié 20s/km plus rapide"),
+        ]
+
+        for week_num in range(1, total_weeks + 1):
+            # Determine phase
+            if week_num <= base_phase:
+                phase = "Base - Développement aérobie"
+                intensity_factor = 0.7
+            elif week_num <= base_phase + build_phase:
+                phase = "Spécifique - Travail à allure cible"
+                intensity_factor = 1.0
+            else:
+                phase = "Affûtage - Réduction volume"
+                intensity_factor = 0.6
+
             week = {
                 "week_number": week_num,
-                "focus": f"Semaine {week_num}",
+                "focus": f"{phase}",
                 "workouts": []
             }
 
-            # Basic pattern: easy, intervals, easy, long run, rest
-            if workouts_per_week >= 3:
-                # Easy run
+            # Calculate progressive distances
+            base_easy = 8 + (week_num * 0.3) if week_num <= base_phase + build_phase else 6
+            base_long = 14 + (week_num * 0.8) if week_num <= base_phase + build_phase else 12
+
+            workout_day = 0
+
+            # Pattern: Easy - Quality - Easy - Quality - Easy - Long
+            if workouts_per_week >= 1:
+                # Day 1: Easy run
                 week["workouts"].append({
-                    "day": 0,
-                    "name": "Endurance facile",
+                    "day": workout_day,
+                    "name": "Endurance fondamentale",
                     "type": "easy_run",
                     "intensity": "easy",
-                    "distance_km": 8.0 + (week_num * 0.5),
-                    "duration_minutes": 45,
-                    "description": "Course à allure conversationnelle",
-                    "warmup": "10 minutes de course lente",
-                    "main_set": "Course continue en endurance fondamentale",
-                    "cooldown": "5 minutes de retour au calme",
+                    "distance_km": round(base_easy, 1),
+                    "duration_minutes": int(base_easy * 6.5),
+                    "description": "Course facile en zone 2 pour développer l'endurance",
+                    "warmup": "Démarrage progressif sur 1km",
+                    "main_set": "Course continue à allure conversationnelle (70-75% FCM)",
+                    "cooldown": "5min de marche + étirements",
                     "pace_min": 330,
                     "pace_max": 360
                 })
-
-            if workouts_per_week >= 4:
-                # Interval training
-                week["workouts"].append({
-                    "day": 2,
-                    "name": "Fractionné",
-                    "type": "intervals",
-                    "intensity": "hard",
-                    "distance_km": 10.0,
-                    "duration_minutes": 60,
-                    "description": "Séance de vitesse",
-                    "warmup": "15 minutes d'échauffement progressif",
-                    "main_set": "6x1000m à allure soutenue avec 2min de récupération",
-                    "cooldown": "10 minutes de retour au calme",
-                    "pace_min": 270,
-                    "pace_max": 300
-                })
+                workout_day += 1
 
             if workouts_per_week >= 2:
-                # Long run
+                # Day 2: Quality workout (varies by week)
+                workout_type_index = (week_num - 1) % 3
+
+                if week_num <= base_phase:
+                    # Base phase: Fartlek and easy tempo
+                    if workout_type_index == 0:
+                        name, wtype, description = fartlek_workouts[week_num % len(fartlek_workouts)]
+                        intensity = "moderate"
+                        pace_min, pace_max = 300, 330
+                    else:
+                        name, wtype, description = tempo_workouts[0]
+                        intensity = "hard"
+                        pace_min, pace_max = 280, 310
+                else:
+                    # Build phase: More intervals
+                    name, wtype, description = interval_workouts[week_num % len(interval_workouts)]
+                    intensity = "very_hard"
+                    pace_min, pace_max = 260, 290
+
                 week["workouts"].append({
-                    "day": 5,
-                    "name": "Sortie longue",
-                    "type": "long_run",
-                    "intensity": "moderate",
-                    "distance_km": 12.0 + (week_num * 1.0),
-                    "duration_minutes": 90,
-                    "description": "Sortie longue en endurance",
-                    "warmup": "Démarrage progressif sur 10 minutes",
-                    "main_set": "Course longue à allure confortable",
-                    "cooldown": "5 minutes de marche",
+                    "day": workout_day,
+                    "name": name,
+                    "type": wtype,
+                    "intensity": intensity,
+                    "distance_km": 12.0,
+                    "duration_minutes": 60,
+                    "description": f"Séance qualité - {name}",
+                    "warmup": "15min de course facile + 3 accélérations progressives de 80m",
+                    "main_set": description,
+                    "cooldown": "10min de course lente + étirements dynamiques",
+                    "pace_min": pace_min,
+                    "pace_max": pace_max
+                })
+                workout_day += 1
+
+            if workouts_per_week >= 3:
+                # Day 3: Recovery or easy
+                week["workouts"].append({
+                    "day": workout_day,
+                    "name": "Récupération active",
+                    "type": "recovery",
+                    "intensity": "very_easy",
+                    "distance_km": 6.0,
+                    "duration_minutes": 40,
+                    "description": "Course de récupération très facile",
+                    "warmup": "Démarrage très progressif",
+                    "main_set": "Course très lente, privilégier la sensation de jambes légères",
+                    "cooldown": "Marche + étirements légers",
+                    "pace_min": 360,
+                    "pace_max": 420
+                })
+                workout_day += 1
+
+            if workouts_per_week >= 4:
+                # Day 4: Hills or tempo (alternate)
+                if is_trail or week_num % 2 == 0:
+                    name, wtype, description = hill_workouts[week_num % len(hill_workouts)]
+                    week["workouts"].append({
+                        "day": workout_day,
+                        "name": name,
+                        "type": wtype,
+                        "intensity": "hard",
+                        "distance_km": 10.0,
+                        "duration_minutes": 55,
+                        "description": f"Renforcement musculaire en côtes - {name}",
+                        "warmup": "2km échauffement sur plat",
+                        "main_set": description,
+                        "cooldown": "1km de course lente sur plat + étirements",
+                        "pace_min": 280,
+                        "pace_max": 320
+                    })
+                else:
+                    name, wtype, description = tempo_workouts[(week_num // 2) % len(tempo_workouts)]
+                    week["workouts"].append({
+                        "day": workout_day,
+                        "name": name,
+                        "type": wtype,
+                        "intensity": "hard",
+                        "distance_km": 11.0,
+                        "duration_minutes": 60,
+                        "description": f"Séance au seuil - {name}",
+                        "warmup": "2km progressif",
+                        "main_set": description,
+                        "cooldown": "1km retour au calme",
+                        "pace_min": 290,
+                        "pace_max": 310
+                    })
+                workout_day += 1
+
+            if workouts_per_week >= 5:
+                # Day 5: Easy run
+                week["workouts"].append({
+                    "day": workout_day,
+                    "name": "Endurance active",
+                    "type": "easy_run",
+                    "intensity": "easy",
+                    "distance_km": round(base_easy * 0.8, 1),
+                    "duration_minutes": int(base_easy * 5),
+                    "description": "Course facile entre deux séances qualité",
+                    "warmup": "Démarrage progressif",
+                    "main_set": "Endurance à allure confortable, écouter ses sensations",
+                    "cooldown": "5min cool down",
+                    "pace_min": 330,
+                    "pace_max": 360
+                })
+                workout_day += 1
+
+            if workouts_per_week >= 2:
+                # Day 6: Long run (varies each week)
+                if week_num % 4 == 0:
+                    # Every 4 weeks: progression long run
+                    name, wtype, description = progression_workouts[week_num % len(progression_workouts)]
+                    intensity = "moderate"
+                else:
+                    name = "Sortie longue"
+                    wtype = "long_run"
+                    description = "Sortie longue pour développer l'endurance fondamentale"
+                    intensity = "easy"
+
+                long_distance = round(min(base_long * intensity_factor, goal.distance_km * 1.2), 1)
+
+                week["workouts"].append({
+                    "day": workout_day,
+                    "name": name,
+                    "type": wtype,
+                    "intensity": intensity,
+                    "distance_km": long_distance,
+                    "duration_minutes": int(long_distance * 7),
+                    "description": f"Sortie longue - {description}",
+                    "warmup": "15min de mise en route progressive",
+                    "main_set": description if wtype == "progression" else f"Course continue de {long_distance}km à allure confortable",
+                    "cooldown": "10min de marche + hydratation + étirements",
                     "pace_min": 330,
                     "pace_max": 360
                 })
