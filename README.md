@@ -1,272 +1,270 @@
-# RunAI - Plateforme d'Entraînement Running avec IA
+# RunAI - Plateforme d'Entraînement Running 100% Locale 🏃‍♂️
 
-Une plateforme complète d'entraînement pour coureurs avec planification assistée par IA, génération d'itinéraires et suivi des objectifs.
+> **NOUVEAU !** Version 2.0 - 100% Gratuit, 100% Local, 0% Cloud
+>
+> Utilisez l'IA pour planifier vos entraînements **sans aucun frais** en utilisant Ollama sur votre PC.
 
-## Fonctionnalités
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-### 🎯 Gestion des Objectifs
-- Création et suivi de multiples objectifs de course (10km, semi-marathon, marathon, trail, ultra)
-- Définition de dates cibles et niveaux actuels
-- Planification multi-objectifs intelligente
+## 🎯 Pourquoi RunAI ?
 
-### 🤖 Planification IA des Entraînements
-- Génération automatique de plans d'entraînement personnalisés
-- Adaptation selon le niveau, disponibilité et objectifs
-- Descriptions détaillées de chaque séance (échauffement, corps, récupération)
-- Types de séances variés : endurance, fractionné, tempo, sortie longue, récupération
+- ✅ **Gratuit à 100%** - Pas de frais d'API, tout sur votre PC
+- ✅ **Privé** - Vos données restent chez vous
+- ✅ **Intelligent** - IA locale pour des plans personnalisés
+- ✅ **Complet** - Objectifs, plans, séances, itinéraires, stats
+- ✅ **Offline** - Fonctionne sans internet (après installation)
 
-### 🗺️ Recherche d'Itinéraires
-- Génération d'itinéraires trail et route
-- Adaptation selon la distance et le dénivelé souhaité
-- Points de départ personnalisables
-- Informations détaillées : distance, dénivelé, type de terrain
+## 🚀 Démarrage Rapide
 
-### 📊 Suivi et Analyses
-- Historique complet des entraînements
-- Graphiques de progression
-- Statistiques hebdomadaires/mensuelles
-- Taux de complétion des séances
+### Installation en 3 étapes
 
-### 👤 Profil Utilisateur
-- Niveau de course (débutant, intermédiaire, avancé, expert)
-- Historique de performances
-- Disponibilité d'entraînement
-- Préférences de terrain
+#### Windows
+```cmd
+1. Installez Python, Node.js et Ollama (liens ci-dessous)
+2. Double-cliquez sur : install-windows.bat
+3. Double-cliquez sur : start-runai.bat
+```
 
-## Architecture Technique
+#### Linux / Mac
+```bash
+1. Installez Python, Node.js et Ollama (liens ci-dessous)
+2. ./install-linux-mac.sh
+3. ./start-runai.sh
+```
 
-### Backend
-- **Framework**: FastAPI (Python 3.11+)
-- **Base de données**: PostgreSQL
-- **ORM**: SQLAlchemy
-- **IA**: Anthropic Claude API
-- **Cartographie**: OpenStreetMap + SRTM pour le dénivelé
+**Ouvrez** : http://localhost:5173
 
-### Frontend
-- **Framework**: React 18 + TypeScript
-- **UI**: Tailwind CSS + Shadcn/UI
-- **État**: React Query + Context API
-- **Cartes**: Leaflet / Mapbox
-- **Graphiques**: Recharts
-
-### Infrastructure
-- **Conteneurisation**: Docker + Docker Compose
-- **API Documentation**: OpenAPI/Swagger
-- **Tests**: Pytest + React Testing Library
-
-## Installation
+📖 **Guide Détaillé** : [QUICK-START.md](QUICK-START.md)
 
 ### Prérequis
-- Docker & Docker Compose
-- Node.js 18+
-- Python 3.11+
 
-### Développement Local
+| Logiciel | Windows | Linux/Mac | Pourquoi |
+|----------|---------|-----------|----------|
+| [Python 3.11+](https://www.python.org/downloads/) | ✅ | ✅ | Backend API |
+| [Node.js 18+](https://nodejs.org/) | ✅ | ✅ | Frontend |
+| [Ollama](https://ollama.ai/download) | ✅ | ✅ | IA Locale |
 
-1. Cloner le repository
-```bash
-git clone <repository-url>
-cd site_training
+## ✨ Fonctionnalités
+
+### 🤖 IA Locale (Ollama)
+- Plans d'entraînement personnalisés générés par LLM local
+- Descriptions détaillées de chaque séance
+- Adaptation au niveau, objectifs et disponibilité
+- **Pas de frais d'API !**
+
+### 🎯 Gestion des Objectifs
+- Support de tous types de courses :
+  - Route : 5K, 10K, Semi-marathon, Marathon
+  - Trail : Court, Moyen, Long, Ultra
+- Suivi de progression en temps réel
+- Multi-objectifs simultanés
+
+### 📅 Plans d'Entraînement
+- Génération automatique par l'IA
+- Séances variées : endurance, fractionné, tempo, côtes...
+- Allures personnalisées par zone d'intensité
+- Descriptions étape par étape (échauffement, corps, récupération)
+
+### 🗺️ Itinéraires Personnalisés
+- Génération d'itinéraires trail/route
+- Adaptation distance et dénivelé
+- Favoris et historique
+- Coordonnées GPS
+
+### 📊 Suivi & Analytics
+- Statistiques de progression
+- Taux de complétion
+- Graphiques de performance
+- Historique complet
+
+## 🖥️ Architecture Technique
+
+### Backend
+- **Framework** : FastAPI (Python 3.11+)
+- **Base de données** : **SQLite** (locale, aucune configuration)
+- **IA** : **Ollama** (LLM local - Llama 3.2, Mistral, etc.)
+- **Authentification** : JWT
+
+### Frontend
+- **Framework** : React 18 + TypeScript
+- **UI** : Tailwind CSS
+- **État** : Context API
+- **Build** : Vite
+
+### Infrastructure
+- **Stockage** :
+  - Windows : `%APPDATA%\RunAI\runai.db`
+  - Linux/Mac : `~/.runai/runai.db`
+- **Ports** :
+  - Backend : 8000
+  - Frontend : 5173
+  - Ollama : 11434
+
+## 📊 Configuration Système
+
+### Minimale
+- **CPU** : 2 cores @ 2.0 GHz
+- **RAM** : 8 GB
+- **Disque** : 5 GB
+- **OS** : Windows 10+, Ubuntu 20.04+, macOS 11+
+
+### Recommandée
+- **CPU** : 4+ cores @ 2.5 GHz
+- **RAM** : 16 GB
+- **Disque** : 10 GB SSD
+- **GPU** : Optionnel (accélère l'IA)
+
+## 🔧 Utilisation
+
+### 1. Inscription
+```
+Créez un compte local (email + mot de passe)
+→ Stocké localement, aucune connexion internet
 ```
 
-2. Configuration des variables d'environnement
-```bash
-cp .env.example .env
-# Éditer .env avec vos clés API
+### 2. Configuration du Profil
+```
+- Niveau : Débutant / Intermédiaire / Avancé / Expert
+- Records personnels (5K, 10K, Semi, Marathon)
+- Disponibilité hebdomadaire
+- Préférence terrain : Trail / Route / Mixte
 ```
 
-3. Lancer avec Docker
-```bash
-docker-compose up -d
+### 3. Création d'un Objectif
+```
+- Type de course (5K → Ultra)
+- Date de l'objectif
+- Temps visé (optionnel)
+- Dénivelé (pour trail)
 ```
 
-4. Accéder à l'application
-- Frontend: http://localhost:3000
-- API: http://localhost:8000
-- Documentation API: http://localhost:8000/docs
+### 4. Génération du Plan
+```
+Cliquez sur "Générer un plan"
+→ L'IA locale analyse votre profil
+→ Génère un plan personnalisé (10-30 secondes)
+→ Séances hebdomadaires avec descriptions détaillées
+```
 
-### Installation Manuelle
+### 5. Suivi des Entraînements
+```
+- Consultez votre planning
+- Marquez les séances complétées
+- Ajoutez vos performances
+- Visualisez votre progression
+```
 
-#### Backend
+## 🔒 Sécurité & Confidentialité
+
+- ✅ **100% Local** - Aucune donnée n'est envoyée en ligne
+- ✅ **Pas de tracking** - Aucune télémétrie
+- ✅ **Open Source** - Code auditable
+- ✅ **Vos données** - Base SQLite locale
+
+## 📚 Documentation
+
+- 📘 [Guide de Démarrage Rapide](QUICK-START.md)
+- 📗 [README Complet](README-LOCAL.md)
+- 📙 [Guide d'Installation Détaillé](INSTALLATION.md)
+- 📕 [Guide de Contribution](CONTRIBUTING.md)
+
+## 🆘 Support & Dépannage
+
+### L'IA ne fonctionne pas ?
+
 ```bash
+# Vérifiez qu'Ollama est installé
+ollama --version
+
+# Téléchargez le modèle
+ollama pull llama3.2:3b
+
+# Listez les modèles disponibles
+ollama list
+```
+
+### Port déjà utilisé ?
+
+```bash
+# Windows
+netstat -ano | findstr :8000
+taskkill /PID <PID> /F
+
+# Linux/Mac
+lsof -ti:8000 | xargs kill -9
+```
+
+### Plus de détails ?
+
+Voir [QUICK-START.md](QUICK-START.md) pour tous les problèmes courants.
+
+## 🌟 Modèles IA Recommandés
+
+| Modèle | Taille | RAM | Vitesse | Qualité |
+|--------|--------|-----|---------|---------|
+| `llama3.2:3b` | 2 GB | 8 GB | ⚡⚡⚡ | ⭐⭐⭐ |
+| `llama3.2:7b` | 4 GB | 12 GB | ⚡⚡ | ⭐⭐⭐⭐ |
+| `mistral:7b` | 4 GB | 12 GB | ⚡⚡ | ⭐⭐⭐⭐ |
+| `llama3:8b` | 4.7 GB | 16 GB | ⚡ | ⭐⭐⭐⭐⭐ |
+
+**Recommandé pour démarrer** : `llama3.2:3b`
+
+Pour changer :
+```bash
+ollama pull <modele>
+# Puis éditez .env
+OLLAMA_MODEL=<modele>
+```
+
+## 🛠️ Développement
+
+```bash
+# Backend
 cd backend
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
-```
 
-#### Frontend
-```bash
+# Frontend
 cd frontend
 npm install
 npm run dev
 ```
 
-## Utilisation
+## 🤝 Contribution
 
-### 1. Créer un Compte
-Inscrivez-vous avec email et mot de passe
+Les contributions sont les bienvenues ! Voir [CONTRIBUTING.md](CONTRIBUTING.md)
 
-### 2. Compléter votre Profil
-- Niveau de course actuel
-- Meilleur temps sur différentes distances
-- Disponibilité hebdomadaire
-- Préférences (trail/route)
+## 📝 Licence
 
-### 3. Définir des Objectifs
-- Type de course (10km, semi, marathon, trail, ultra)
-- Date de l'objectif
-- Temps visé
-- Priorité
+MIT - Utilisez, modifiez et distribuez librement
 
-### 4. Générer un Plan d'Entraînement
-L'IA analyse votre profil et génère un plan personnalisé avec :
-- Séances hebdomadaires adaptées
-- Progression intelligente
-- Descriptions détaillées de chaque entraînement
-- Recommandations d'itinéraires
+## 🙏 Remerciements
 
-### 5. Suivre vos Entraînements
-- Marquer les séances comme complétées
-- Ajouter des notes et ressentis
-- Visualiser votre progression
+- [Ollama](https://ollama.ai/) - IA locale gratuite
+- [FastAPI](https://fastapi.tiangolo.com/) - Backend Python
+- [React](https://react.dev/) - Framework frontend
+- Communauté open source
 
-## Structure du Projet
+## 📊 Changelog
 
-```
-site_training/
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── routes/
-│   │   │   │   ├── auth.py
-│   │   │   │   ├── users.py
-│   │   │   │   ├── goals.py
-│   │   │   │   ├── training_plans.py
-│   │   │   │   ├── workouts.py
-│   │   │   │   └── routes.py
-│   │   │   └── deps.py
-│   │   ├── core/
-│   │   │   ├── config.py
-│   │   │   ├── security.py
-│   │   │   └── database.py
-│   │   ├── models/
-│   │   │   ├── user.py
-│   │   │   ├── goal.py
-│   │   │   ├── training_plan.py
-│   │   │   ├── workout.py
-│   │   │   └── route.py
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   │   ├── ai_planner.py
-│   │   │   ├── route_finder.py
-│   │   │   └── workout_generator.py
-│   │   └── main.py
-│   ├── alembic/
-│   ├── tests/
-│   ├── requirements.txt
-│   └── Dockerfile
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── auth/
-│   │   │   ├── dashboard/
-│   │   │   ├── goals/
-│   │   │   ├── training/
-│   │   │   ├── routes/
-│   │   │   └── shared/
-│   │   ├── contexts/
-│   │   ├── hooks/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── types/
-│   │   ├── utils/
-│   │   ├── App.tsx
-│   │   └── main.tsx
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── Dockerfile
-├── docker-compose.yml
-├── .env.example
-└── README.md
-```
+### Version 2.0 (Actuelle)
+- ✨ Remplacement d'Anthropic par Ollama (IA locale)
+- ✨ Remplacement de PostgreSQL par SQLite
+- ✨ Scripts d'installation automatisés
+- ✨ Support Windows/Linux/Mac
+- ✨ Mode 100% offline
+- ✨ Zéro coût d'API
 
-## API Endpoints
+### Version 1.0
+- Première version avec Anthropic API
+- PostgreSQL + Docker
 
-### Authentication
-- `POST /api/auth/register` - Inscription
-- `POST /api/auth/login` - Connexion
-- `POST /api/auth/refresh` - Rafraîchir le token
+---
 
-### Users
-- `GET /api/users/me` - Profil utilisateur
-- `PUT /api/users/me` - Mettre à jour le profil
-- `GET /api/users/me/stats` - Statistiques
+**RunAI - Entraînez-vous intelligemment, gratuitement et en privé ! 🏃‍♂️💪**
 
-### Goals
-- `GET /api/goals` - Liste des objectifs
-- `POST /api/goals` - Créer un objectif
-- `GET /api/goals/{id}` - Détails d'un objectif
-- `PUT /api/goals/{id}` - Modifier un objectif
-- `DELETE /api/goals/{id}` - Supprimer un objectif
-
-### Training Plans
-- `GET /api/training-plans` - Liste des plans
-- `POST /api/training-plans/generate` - Générer un plan avec l'IA
-- `GET /api/training-plans/{id}` - Détails d'un plan
-- `PUT /api/training-plans/{id}/workouts/{workout_id}` - Marquer séance complétée
-
-### Workouts
-- `GET /api/workouts` - Liste des séances
-- `GET /api/workouts/{id}` - Détails d'une séance
-- `POST /api/workouts/{id}/complete` - Marquer comme complétée
-- `POST /api/workouts/{id}/notes` - Ajouter des notes
-
-### Routes
-- `POST /api/routes/generate` - Générer un itinéraire
-- `GET /api/routes` - Historique des itinéraires
-- `GET /api/routes/{id}` - Détails d'un itinéraire
-
-## Variables d'Environnement
-
-### Backend (.env)
-```env
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/runai
-
-# Security
-SECRET_KEY=your-secret-key-here
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-
-# Anthropic AI
-ANTHROPIC_API_KEY=your-anthropic-api-key
-
-# Maps API (optional)
-MAPBOX_TOKEN=your-mapbox-token
-```
-
-### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:8000
-VITE_MAPBOX_TOKEN=your-mapbox-token
-```
-
-## Contribution
-
-Les contributions sont les bienvenues ! Merci de :
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
-## Licence
-
-MIT
-
-## Support
-
-Pour toute question ou problème, ouvrir une issue sur GitHub.
+[⭐ Star le projet](../../) | [🐛 Signaler un bug](../../issues) | [💡 Proposer une fonctionnalité](../../issues)

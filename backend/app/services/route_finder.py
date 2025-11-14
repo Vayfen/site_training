@@ -1,4 +1,4 @@
-from anthropic import Anthropic
+import ollama
 from typing import Dict, Any, Optional
 from sqlalchemy.orm import Session
 from ..core.config import settings
@@ -9,10 +9,11 @@ import math
 
 
 class RouteFinderService:
-    """Service to generate and find running routes"""
+    """Service to generate and find running routes using Local LLM"""
 
     def __init__(self):
-        self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        self.model = settings.OLLAMA_MODEL
+        self.base_url = settings.OLLAMA_BASE_URL
 
     def generate_route(
         self,
@@ -33,16 +34,24 @@ class RouteFinderService:
             user, distance_km, route_type, start_location, elevation_preference, loop
         )
 
-        # Call Claude API
-        response = self.client.messages.create(
-            model="claude-3-5-sonnet-20241022",
-            max_tokens=2000,
-            messages=[{"role": "user", "content": prompt}],
-        )
+        # Call Local LLM (Ollama)
+        try:
+            response = ollama.chat(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                options={
+                    "temperature": 0.8,
+                    "num_predict": 1000,
+                }
+            )
 
-        # Parse AI response
-        ai_response = response.content[0].text
-        route_data = self._parse_route_response(ai_response)
+            # Parse AI response
+            ai_response = response['message']['content']
+            route_data = self._parse_route_response(ai_response)
+
+        except Exception as e:
+            print(f"Error calling Ollama: {e}")
+            route_data = {}
 
         # Generate synthetic route coordinates if not provided
         if not route_data.get("coordinates"):
