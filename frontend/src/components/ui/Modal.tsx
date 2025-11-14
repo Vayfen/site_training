@@ -27,12 +27,12 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn">
       <div
-        className={`relative w-full ${sizes[size]} bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl border border-slate-600/50 shadow-2xl max-h-[90vh] overflow-hidden animate-scaleIn`}
+        className={`relative w-full ${sizes[size]} bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl border border-slate-500/60 shadow-2xl max-h-[90vh] overflow-hidden animate-scaleIn`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-600/40 bg-gradient-to-r from-blue-500/15 to-purple-500/15">
+        <div className="flex items-center justify-between p-6 border-b border-slate-500/50 bg-gradient-to-r from-blue-600/20 to-purple-600/20">
           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             {title}
           </h2>

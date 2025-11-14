@@ -245,7 +245,8 @@ const Goals = () => {
               key={goal.id}
               variant="gradient"
               hover
-              className="group animate-slideInUp"
+              className="group animate-slideInUp cursor-pointer"
+              onClick={() => navigate('/training-plans')}
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
@@ -262,7 +263,7 @@ const Goals = () => {
                     {goal.name}
                   </h3>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -329,25 +330,15 @@ const Goals = () => {
               {/* Actions */}
               <div className="flex gap-2">
                 {(goal as any).has_training_plan ? (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => navigate('/training-plans')}
-                    icon={<ExternalLink className="w-4 h-4" />}
-                    className="flex-1"
-                  >
-                    Voir le plan
-                  </Button>
+                  <div className="flex-1 text-center text-sm text-blue-400 font-medium">
+                    <ExternalLink className="w-4 h-4 inline mr-1" />
+                    Cliquez pour voir le plan
+                  </div>
                 ) : (
-                  <Button
-                    variant="success"
-                    size="sm"
-                    onClick={() => navigate('/training-plans')}
-                    icon={<TrendingUp className="w-4 h-4" />}
-                    className="flex-1"
-                  >
-                    Générer un plan
-                  </Button>
+                  <div className="flex-1 text-center text-sm text-green-400 font-medium">
+                    <TrendingUp className="w-4 h-4 inline mr-1" />
+                    Cliquez pour générer un plan
+                  </div>
                 )}
               </div>
             </Card>
