@@ -33,8 +33,8 @@ const Layout = () => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-primary-600">RunAI</h1>
-            <p className="text-sm text-gray-500 mt-1">Entraînement intelligent</p>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">RunAI</h1>
+            <p className="text-sm text-gray-600 mt-1">Entraînement intelligent</p>
           </div>
 
           {/* Navigation */}
@@ -45,9 +45,9 @@ const Layout = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                     isActive(item.href)
-                      ? 'bg-primary-50 text-primary-700 font-medium'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium shadow-lg shadow-blue-500/20'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
@@ -62,9 +62,9 @@ const Layout = () => {
           <div className="p-4 border-t border-gray-200">
             <Link
               to="/profile"
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mb-2 ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors mb-2 ${
                 isActive('/profile')
-                  ? 'bg-primary-50 text-primary-700'
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/20'
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -77,7 +77,7 @@ const Layout = () => {
 
             <button
               onClick={logout}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 w-full transition-colors"
             >
               <LogOut size={20} />
               <span>Déconnexion</span>

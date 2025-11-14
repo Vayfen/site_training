@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react';
 import { routesService } from '../services/routes.service';
 import { Route } from '../types';
-import { Map, Plus, Heart, Mountain, X, MapPin } from 'lucide-react';
+import { Map, Plus, Heart, Mountain, X, MapPin, Trash2, MapPinned } from 'lucide-react';
+import { Modal } from '../components/ui/Modal';
+import { Button } from '../components/ui/Button';
+import { RouteMap } from '../components/RouteMap';
 
 const RoutesPage = () => {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [routeToDelete, setRouteToDelete] = useState<Route | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -35,13 +43,42 @@ const RoutesPage = () => {
     }
   };
 
-  const handleToggleFavorite = async (routeId: number) => {
+  const handleToggleFavorite = async (routeId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
       await routesService.toggleFavorite(routeId);
       await loadRoutes();
     } catch (error) {
       console.error('Error toggling favorite:', error);
     }
+  };
+
+  const handleDeleteClick = (route: Route, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRouteToDelete(route);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteRoute = async () => {
+    if (!routeToDelete) return;
+    setDeleting(true);
+
+    try {
+      await routesService.deleteRoute(routeToDelete.id);
+      await loadRoutes();
+      setShowDeleteModal(false);
+      setRouteToDelete(null);
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Erreur lors de la suppression');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleViewOnMap = (route: Route, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedRoute(route);
+    setShowMapModal(true);
   };
 
   const handleGenerateRoute = async (e: React.FormEvent) => {
@@ -153,18 +190,26 @@ const RoutesPage = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {routes.map((route) => (
-            <div key={route.id} className="card hover:shadow-lg transition-shadow">
+            <div key={route.id} className="card hover:shadow-lg transition-shadow group">
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-xl font-bold flex-1">{route.name}</h3>
-                <button
-                  onClick={() => handleToggleFavorite(route.id)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <Heart
-                    size={20}
-                    className={route.is_favorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}
-                  />
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={(e) => handleToggleFavorite(route.id, e)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <Heart
+                      size={20}
+                      className={route.is_favorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}
+                    />
+                  </button>
+                  <button
+                    onClick={(e) => handleDeleteClick(route, e)}
+                    className="p-2 hover:bg-red-50 rounded-full transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <Trash2 size={20} className="text-red-500" />
+                  </button>
+                </div>
               </div>
 
               {route.description && (
@@ -225,14 +270,26 @@ const RoutesPage = () => {
                 )}
               </div>
 
-              <div className="pt-4 border-t border-gray-200 flex items-center justify-between">
-                <div className="text-sm text-gray-600">
-                  Utilisé {route.times_used} fois
+              <div className="pt-4 border-t border-gray-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-gray-600">
+                    Utilisé {route.times_used} fois
+                  </div>
+                  {route.generated_by_ai && (
+                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                      IA
+                    </span>
+                  )}
                 </div>
-                {route.generated_by_ai && (
-                  <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-                    IA
-                  </span>
+
+                {(route.start_lat && route.start_lng) && (
+                  <button
+                    onClick={(e) => handleViewOnMap(route, e)}
+                    className="w-full btn btn-secondary flex items-center justify-center gap-2 py-2 text-sm"
+                  >
+                    <MapPinned size={16} />
+                    Voir sur la carte
+                  </button>
                 )}
               </div>
             </div>
@@ -413,6 +470,108 @@ const RoutesPage = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Map View Modal */}
+      {showMapModal && selectedRoute && (
+        <Modal
+          isOpen={showMapModal}
+          onClose={() => {
+            setShowMapModal(false);
+            setSelectedRoute(null);
+          }}
+          title={selectedRoute.name}
+          size="xl"
+        >
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="text-gray-600">Distance:</span>{' '}
+                <span className="text-gray-900 font-medium">{selectedRoute.distance_km.toFixed(1)} km</span>
+              </div>
+              <div>
+                <span className="text-gray-600">Type:</span>{' '}
+                <span className="text-gray-900 font-medium">
+                  {routeTypeLabels[selectedRoute.route_type] || selectedRoute.route_type}
+                </span>
+              </div>
+              {selectedRoute.elevation_gain_m > 0 && (
+                <div>
+                  <span className="text-gray-600">Dénivelé:</span>{' '}
+                  <span className="text-gray-900 font-medium">+{selectedRoute.elevation_gain_m}m</span>
+                </div>
+              )}
+              {selectedRoute.start_location && (
+                <div>
+                  <span className="text-gray-600">Départ:</span>{' '}
+                  <span className="text-gray-900 font-medium">{selectedRoute.start_location}</span>
+                </div>
+              )}
+            </div>
+
+            {selectedRoute.description && (
+              <p className="text-gray-700 text-sm bg-gray-50 p-3 rounded-lg border border-gray-200">
+                {selectedRoute.description}
+              </p>
+            )}
+
+            <div className="mt-4">
+              <RouteMap route={selectedRoute} height="500px" />
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setShowMapModal(false);
+                  setSelectedRoute(null);
+                }}
+                className="flex-1"
+              >
+                Fermer
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Delete Route Modal */}
+      {showDeleteModal && routeToDelete && (
+        <Modal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          title="Supprimer l'itinéraire"
+          size="md"
+        >
+          <div className="space-y-4">
+            <p className="text-gray-700">
+              Êtes-vous sûr de vouloir supprimer l'itinéraire{' '}
+              <strong className="text-gray-900">"{routeToDelete.name}"</strong> ?
+            </p>
+            <p className="text-sm text-gray-600">
+              Cette action est irréversible.
+            </p>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                variant="ghost"
+                onClick={() => setShowDeleteModal(false)}
+                disabled={deleting}
+                className="flex-1"
+              >
+                Annuler
+              </Button>
+              <Button
+                variant="danger"
+                onClick={handleDeleteRoute}
+                loading={deleting}
+                className="flex-1"
+              >
+                Supprimer
+              </Button>
+            </div>
+          </div>
+        </Modal>
       )}
     </div>
   );

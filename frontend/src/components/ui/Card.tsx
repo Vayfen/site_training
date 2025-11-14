@@ -18,12 +18,12 @@ export const Card: React.FC<CardProps> = ({
   const baseStyles = 'rounded-2xl p-6 transition-all duration-300';
 
   const variants = {
-    default: 'bg-slate-800/80 border border-slate-600/60 backdrop-blur-sm shadow-xl',
-    glass: 'bg-white/15 border border-white/30 backdrop-blur-lg shadow-2xl',
-    gradient: 'bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-slate-600/60 shadow-2xl',
+    default: 'bg-white border border-gray-200 shadow-lg',
+    glass: 'bg-white/70 border border-white/40 backdrop-blur-xl shadow-2xl',
+    gradient: 'bg-gradient-to-br from-white to-blue-50/30 border border-gray-200 shadow-xl',
   };
 
-  const hoverStyles = hover ? 'cursor-pointer hover:scale-[1.02] hover:shadow-2xl hover:border-blue-500/50' : '';
+  const hoverStyles = hover ? 'cursor-pointer hover:scale-[1.02] hover:shadow-2xl hover:border-blue-400' : '';
 
   return (
     <div
