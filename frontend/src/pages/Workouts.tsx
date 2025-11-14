@@ -68,7 +68,7 @@ const Workouts = () => {
     if (!workoutToDelete) return;
     setDeleting(true);
 
-    try:
+    try {
       await trainingService.deleteWorkout(workoutToDelete.id);
       await loadWorkouts();
       setShowDeleteModal(false);
