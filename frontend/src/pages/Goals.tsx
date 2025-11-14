@@ -55,7 +55,7 @@ const Goals = () => {
     { value: 'trail_short', label: 'Trail court (<25km)', distance: 20 },
     { value: 'trail_medium', label: 'Trail moyen (25-50km)', distance: 35 },
     { value: 'trail_long', label: 'Trail long (50-80km)', distance: 65 },
-    { value: 'ultra_trail', label: 'Ultra trail (>80km)', distance: 100 },
+    { value: 'ultra', label: 'Ultra (>80km)', distance: 100 },
   ];
 
   const handleRaceTypeChange = (raceType: string) => {

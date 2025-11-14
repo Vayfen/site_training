@@ -182,10 +182,10 @@ IMPORTANT:
     def _generate_fallback_plan(self, user: User, goal: Goal, weeks: int) -> Dict[str, Any]:
         """Generate an intelligent, varied fallback plan if AI fails"""
         workouts_per_week = min(user.preferred_training_days, 6)
-        is_trail = goal.race_type.value in ['trail_short', 'trail_medium', 'trail_long', 'ultra_trail']
+        is_trail = goal.race_type.value in ['trail_short', 'trail_medium', 'trail_long', 'ultra']
 
-        # Define training phases
-        total_weeks = min(weeks, 16)
+        # Define training phases - cap at 30 weeks for very long plans
+        total_weeks = min(weeks, 30)
         base_phase = int(total_weeks * 0.5)  # 50% base building
         build_phase = int(total_weeks * 0.35)  # 35% specific training
         taper_phase = total_weeks - base_phase - build_phase  # 15% taper
