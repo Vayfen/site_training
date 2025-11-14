@@ -34,6 +34,7 @@ class AITrainingPlanner:
 
         try:
             # Call Ollama API
+            print(f"[AI Planner] Calling Ollama with model: {self.model}")
             response = ollama.chat(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
@@ -45,11 +46,19 @@ class AITrainingPlanner:
 
             # Parse AI response
             ai_response = response['message']['content']
+            print(f"[AI Planner] Received response from Ollama ({len(ai_response)} chars)")
             plan_data = self._parse_ai_response(ai_response)
 
+            # Verify we got valid weeks data
+            if not plan_data.get("weeks") or len(plan_data.get("weeks", [])) == 0:
+                print("[AI Planner] AI response had no weeks data, using fallback plan")
+                plan_data = self._generate_fallback_plan(user, goal, weeks_available)
+            else:
+                print(f"[AI Planner] Successfully parsed {len(plan_data['weeks'])} weeks from AI")
+
         except Exception as e:
-            print(f"Error calling Ollama: {e}")
-            print("Falling back to basic plan generation")
+            print(f"[AI Planner] Error calling Ollama: {e}")
+            print("[AI Planner] Falling back to basic plan generation")
             plan_data = self._generate_fallback_plan(user, goal, weeks_available)
 
         # Create training plan
@@ -69,15 +78,18 @@ class AITrainingPlanner:
         db.flush()
 
         # Create workouts from AI plan
+        print(f"[AI Planner] Creating workouts from plan data...")
         workouts = self._create_workouts_from_plan(
             db, training_plan, plan_data, start_date
         )
 
+        print(f"[AI Planner] Generated {len(workouts)} workouts")
         for workout in workouts:
             db.add(workout)
 
         db.commit()
         db.refresh(training_plan)
+        print(f"[AI Planner] Training plan created with {len(training_plan.workouts)} workouts")
 
         return training_plan
 
@@ -247,6 +259,8 @@ IMPORTANT:
             end = response.rfind("}") + 1
 
             if start == -1 or end == 0:
+                print(f"[AI Planner] No JSON found in response")
+                print(f"[AI Planner] Response preview: {response[:500]}...")
                 raise ValueError("No JSON found in response")
 
             json_str = response[start:end]
@@ -254,13 +268,16 @@ IMPORTANT:
 
             # Validate structure
             if "weeks" not in parsed or not parsed["weeks"]:
+                print(f"[AI Planner] Invalid plan structure - missing weeks data")
+                print(f"[AI Planner] Parsed keys: {list(parsed.keys())}")
                 raise ValueError("Invalid plan structure")
 
+            print(f"[AI Planner] Successfully parsed plan with {len(parsed['weeks'])} weeks")
             return parsed
 
         except Exception as e:
-            print(f"Error parsing AI response: {e}")
-            print(f"Response: {response[:500]}...")
+            print(f"[AI Planner] Error parsing AI response: {e}")
+            print(f"[AI Planner] Response preview: {response[:500]}...")
             return {"description": "Plan d'entraînement personnalisé", "weeks": []}
 
     def _create_workouts_from_plan(
