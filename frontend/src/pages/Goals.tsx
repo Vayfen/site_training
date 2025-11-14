@@ -212,7 +212,7 @@ const Goals = () => {
             <Trophy className="w-10 h-10" />
             Mes Objectifs
           </h1>
-          <p className="text-gray-400 mt-2">
+          <p className="text-gray-600 mt-2">
             Définissez vos objectifs et générez vos plans d'entraînement
           </p>
         </div>
@@ -228,9 +228,9 @@ const Goals = () => {
       {/* Goals Grid */}
       {goals.length === 0 ? (
         <Card className="text-center py-16" variant="glass">
-          <Target className="w-20 h-20 mx-auto mb-4 text-gray-600" />
-          <h3 className="text-xl font-semibold text-gray-400 mb-2">Aucun objectif</h3>
-          <p className="text-gray-500 mb-6">Commencez par créer votre premier objectif de course</p>
+          <Target className="w-20 h-20 mx-auto mb-4 text-gray-400" />
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucun objectif</h3>
+          <p className="text-gray-600 mb-6">Commencez par créer votre premier objectif de course</p>
           <Button
             onClick={() => setShowCreateModal(true)}
             icon={<Plus className="w-5 h-5" />}
@@ -259,7 +259,7 @@ const Goals = () => {
                       {getRaceTypeLabel(goal.race_type)}
                     </Badge>
                   </div>
-                  <h3 className="text-xl font-bold text-white group-hover:gradient-text transition-all">
+                  <h3 className="text-xl font-bold text-gray-900 group-hover:gradient-text transition-all">
                     {goal.name}
                   </h3>
                 </div>
@@ -276,15 +276,15 @@ const Goals = () => {
                     size="sm"
                     onClick={() => handleDeleteClick(goal)}
                     icon={<Trash2 className="w-4 h-4" />}
-                    className="!p-2 opacity-0 group-hover:opacity-100 transition-opacity !text-red-400"
+                    className="!p-2 opacity-0 group-hover:opacity-100 transition-opacity !text-red-600"
                   />
                 </div>
               </div>
 
               {/* Details */}
               <div className="space-y-3 mb-4">
-                <div className="flex items-center gap-2 text-gray-300">
-                  <Calendar className="w-4 h-4 text-blue-400" />
+                <div className="flex items-center gap-2 text-gray-700">
+                  <Calendar className="w-4 h-4 text-blue-500" />
                   <span className="text-sm">
                     {format(new Date(goal.target_date), 'dd MMMM yyyy', { locale: fr })}
                   </span>
@@ -293,17 +293,17 @@ const Goals = () => {
                   </Badge>
                 </div>
 
-                <div className="flex items-center gap-2 text-gray-300">
-                  <Zap className="w-4 h-4 text-purple-400" />
+                <div className="flex items-center gap-2 text-gray-700">
+                  <Zap className="w-4 h-4 text-purple-500" />
                   <span className="text-sm">{goal.distance_km} km</span>
                   {goal.elevation_gain_m > 0 && (
-                    <span className="text-xs text-gray-400">• {goal.elevation_gain_m}m D+</span>
+                    <span className="text-xs text-gray-600">• {goal.elevation_gain_m}m D+</span>
                   )}
                 </div>
 
                 {goal.race_location && (
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <MapPin className="w-4 h-4 text-green-400" />
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <MapPin className="w-4 h-4 text-green-500" />
                     <span className="text-sm">{goal.race_location}</span>
                   </div>
                 )}
@@ -504,10 +504,10 @@ const Goals = () => {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-300">
-            Êtes-vous sûr de vouloir supprimer l'objectif <span className="font-bold text-white">"{selectedGoal?.name}"</span> ?
+          <p className="text-gray-700">
+            Êtes-vous sûr de vouloir supprimer l'objectif <span className="font-bold text-gray-900">"{selectedGoal?.name}"</span> ?
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-600">
             Cette action supprimera également tous les plans d'entraînement associés.
           </p>
           <div className="flex gap-3 justify-end pt-4">

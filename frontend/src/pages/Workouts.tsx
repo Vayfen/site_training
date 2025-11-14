@@ -129,7 +129,7 @@ const Workouts = () => {
           <Flame className="w-10 h-10" />
           Mes Séances
         </h1>
-        <p className="text-gray-300 mt-2">
+        <p className="text-gray-600 mt-2">
           Planning hebdomadaire de vos entraînements
         </p>
       </div>
@@ -146,7 +146,7 @@ const Workouts = () => {
           </Button>
 
           <div className="flex-1 text-center">
-            <div className="text-xl font-bold text-white">
+            <div className="text-xl font-bold text-gray-900">
               {format(currentWeekStart, 'dd MMMM yyyy', { locale: fr })}
             </div>
             <div className="flex items-center justify-center gap-2 mt-2">
@@ -181,9 +181,9 @@ const Workouts = () => {
       {/* Workouts list */}
       {workouts.length === 0 ? (
         <Card className="text-center py-16" variant="glass">
-          <Calendar size={64} className="mx-auto mb-4 text-gray-500" />
-          <h2 className="text-xl font-semibold mb-2 text-gray-300">Aucune séance cette semaine</h2>
-          <p className="text-gray-400">Générez un plan d'entraînement pour commencer</p>
+          <Calendar size={64} className="mx-auto mb-4 text-gray-400" />
+          <h2 className="text-xl font-semibold mb-2 text-gray-900">Aucune séance cette semaine</h2>
+          <p className="text-gray-600">Générez un plan d'entraînement pour commencer</p>
         </Card>
       ) : (
         <div className="space-y-4">
@@ -219,7 +219,7 @@ const Workouts = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className={`text-xl font-bold mb-2 ${workout.is_completed ? 'text-green-400' : 'text-white'}`}>
+                        <h3 className={`text-xl font-bold mb-2 ${workout.is_completed ? 'text-green-600' : 'text-gray-900'}`}>
                           {workout.name}
                         </h3>
                         <div className="flex items-center gap-3 flex-wrap">
@@ -245,12 +245,12 @@ const Workouts = () => {
                           size="sm"
                           onClick={(e) => handleDeleteClick(workout, e)}
                           icon={<Trash2 className="w-4 h-4" />}
-                          className="!p-2 opacity-0 group-hover:opacity-100 transition-opacity !text-red-400"
+                          className="!p-2 opacity-0 group-hover:opacity-100 transition-opacity !text-red-600"
                         />
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300 mb-3">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700 mb-3">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-blue-400" />
                         {format(new Date(workout.scheduled_date), 'EEEE dd MMMM', { locale: fr })}
@@ -271,43 +271,43 @@ const Workouts = () => {
                       )}
                     </div>
 
-                    <p className="text-gray-300 line-clamp-2">{workout.description}</p>
+                    <p className="text-gray-700 line-clamp-2">{workout.description}</p>
 
                     {/* Expanded details */}
                     {isExpanded && (
-                      <div className="mt-6 pt-6 border-t border-slate-600/50 space-y-4 animate-slideInDown">
+                      <div className="mt-6 pt-6 border-t border-gray-200 space-y-4 animate-slideInDown">
                         {workout.warmup_description && (
-                          <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/30">
-                            <h4 className="font-semibold mb-2 text-blue-400 flex items-center gap-2">
+                          <div className="bg-blue-50 p-4 rounded-xl border border-blue-300">
+                            <h4 className="font-semibold mb-2 text-blue-700 flex items-center gap-2">
                               <Flame className="w-4 h-4" />
                               Échauffement
                             </h4>
-                            <p className="text-gray-300">{workout.warmup_description}</p>
+                            <p className="text-gray-700">{workout.warmup_description}</p>
                           </div>
                         )}
 
-                        <div className="bg-purple-500/10 p-4 rounded-xl border border-purple-500/30">
-                          <h4 className="font-semibold mb-2 text-purple-400 flex items-center gap-2">
+                        <div className="bg-purple-50 p-4 rounded-xl border border-purple-300">
+                          <h4 className="font-semibold mb-2 text-purple-700 flex items-center gap-2">
                             <Flame className="w-4 h-4" />
                             Corps de séance
                           </h4>
-                          <p className="text-gray-300">{workout.main_set_description}</p>
+                          <p className="text-gray-700">{workout.main_set_description}</p>
                         </div>
 
                         {workout.cooldown_description && (
-                          <div className="bg-green-500/10 p-4 rounded-xl border border-green-500/30">
-                            <h4 className="font-semibold mb-2 text-green-400 flex items-center gap-2">
+                          <div className="bg-green-50 p-4 rounded-xl border border-green-300">
+                            <h4 className="font-semibold mb-2 text-green-700 flex items-center gap-2">
                               <Flame className="w-4 h-4" />
                               Retour au calme
                             </h4>
-                            <p className="text-gray-300">{workout.cooldown_description}</p>
+                            <p className="text-gray-700">{workout.cooldown_description}</p>
                           </div>
                         )}
 
                         {workout.target_pace_min && workout.target_pace_max && (
-                          <div className="bg-orange-500/10 p-4 rounded-xl border border-orange-500/30">
-                            <h4 className="font-semibold mb-2 text-orange-400">Allure cible</h4>
-                            <p className="text-gray-300 font-mono text-lg">
+                          <div className="bg-orange-50 p-4 rounded-xl border border-orange-300">
+                            <h4 className="font-semibold mb-2 text-orange-700">Allure cible</h4>
+                            <p className="text-gray-700 font-mono text-lg">
                               {Math.floor(workout.target_pace_min / 60)}:
                               {String(workout.target_pace_min % 60).padStart(2, '0')} -{' '}
                               {Math.floor(workout.target_pace_max / 60)}:
@@ -336,8 +336,8 @@ const Workouts = () => {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-300">
-            Êtes-vous sûr de vouloir supprimer la séance <span className="font-bold text-white">"{workoutToDelete?.name}"</span> ?
+          <p className="text-gray-700">
+            Êtes-vous sûr de vouloir supprimer la séance <span className="font-bold text-gray-900">"{workoutToDelete?.name}"</span> ?
           </p>
           <div className="flex gap-3 justify-end pt-4">
             <Button

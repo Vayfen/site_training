@@ -93,7 +93,7 @@ const TrainingPlans = () => {
           <Calendar className="w-10 h-10" />
           Plans d'Entraînement
         </h1>
-        <p className="text-gray-300 mt-2">
+        <p className="text-gray-600 mt-2">
           Plans personnalisés générés avec variété de séances
         </p>
       </div>
@@ -106,11 +106,11 @@ const TrainingPlans = () => {
               <Sparkles className="text-white" size={28} />
             </div>
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                 Générer un nouveau plan
                 <Badge variant="purple" size="sm">IA</Badge>
               </h2>
-              <p className="text-gray-300 mb-4">
+              <p className="text-gray-700 mb-4">
                 Créez un plan d'entraînement personnalisé avec 15+ types de séances variées
               </p>
 
@@ -146,9 +146,9 @@ const TrainingPlans = () => {
       {/* Existing plans */}
       {plans.length === 0 ? (
         <Card className="text-center py-16" variant="glass">
-          <Calendar size={64} className="mx-auto mb-4 text-gray-500" />
-          <h2 className="text-xl font-semibold mb-2 text-gray-300">Aucun plan d'entraînement</h2>
-          <p className="text-gray-400 mb-6">
+          <Calendar size={64} className="mx-auto mb-4 text-gray-400" />
+          <h2 className="text-xl font-semibold mb-2 text-gray-900">Aucun plan d'entraînement</h2>
+          <p className="text-gray-600 mb-6">
             {availableGoals.length > 0
               ? 'Générez votre premier plan ci-dessus'
               : 'Créez un objectif pour commencer'}
@@ -172,7 +172,7 @@ const TrainingPlans = () => {
               <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-2xl font-bold text-white group-hover:gradient-text transition-all">
+                    <h3 className="text-2xl font-bold text-gray-900 group-hover:gradient-text transition-all">
                       {plan.name}
                     </h3>
                     {plan.generated_by_ai && (
@@ -183,7 +183,7 @@ const TrainingPlans = () => {
                     )}
                   </div>
                   {plan.description && (
-                    <p className="text-gray-300">{plan.description}</p>
+                    <p className="text-gray-700">{plan.description}</p>
                   )}
                 </div>
                 <div onClick={(e) => e.stopPropagation()}>
@@ -192,48 +192,48 @@ const TrainingPlans = () => {
                     size="sm"
                     onClick={(e) => handleDeleteClick(plan, e)}
                     icon={<Trash2 className="w-4 h-4" />}
-                    className="!p-2 opacity-0 group-hover:opacity-100 transition-opacity !text-red-400"
+                    className="!p-2 opacity-0 group-hover:opacity-100 transition-opacity !text-red-600"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="bg-blue-500/20 p-3 rounded-xl border border-blue-500/40">
-                    <Calendar className="text-blue-400" size={22} />
+                  <div className="bg-blue-100 p-3 rounded-xl border border-blue-300">
+                    <Calendar className="text-blue-600" size={22} />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400">Durée</p>
-                    <p className="font-semibold text-white text-lg">{plan.duration_weeks} semaines</p>
+                    <p className="text-sm text-gray-600">Durée</p>
+                    <p className="font-semibold text-gray-900 text-lg">{plan.duration_weeks} semaines</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="bg-green-500/20 p-3 rounded-xl border border-green-500/40">
-                    <Target className="text-green-400" size={22} />
+                  <div className="bg-green-100 p-3 rounded-xl border border-green-300">
+                    <Target className="text-green-600" size={22} />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400">Séances</p>
-                    <p className="font-semibold text-white text-lg">
+                    <p className="text-sm text-gray-600">Séances</p>
+                    <p className="font-semibold text-gray-900 text-lg">
                       {plan.completed_workouts || 0}/{plan.total_workouts || 0}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="bg-purple-500/20 p-3 rounded-xl border border-purple-500/40">
-                    <TrendingUp className="text-purple-400" size={22} />
+                  <div className="bg-purple-100 p-3 rounded-xl border border-purple-300">
+                    <TrendingUp className="text-purple-600" size={22} />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400">Progression</p>
-                    <p className="font-semibold text-white text-lg">{Math.round(plan.completion_rate || 0)}%</p>
+                    <p className="text-sm text-gray-600">Progression</p>
+                    <p className="font-semibold text-gray-900 text-lg">{Math.round(plan.completion_rate || 0)}%</p>
                   </div>
                 </div>
               </div>
 
               {/* Progress bar */}
               <div className="mb-6">
-                <div className="w-full bg-slate-900/50 rounded-full h-3 overflow-hidden">
+                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full transition-all duration-500 shadow-lg shadow-green-500/50"
                     style={{ width: `${plan.completion_rate || 0}%` }}
@@ -241,13 +241,13 @@ const TrainingPlans = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-6 border-t border-slate-600/50">
-                <div className="text-sm text-gray-400">
+              <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+                <div className="text-sm text-gray-600">
                   Du {format(new Date(plan.start_date), 'dd MMM', { locale: fr })} au{' '}
                   {format(new Date(plan.end_date), 'dd MMM yyyy', { locale: fr })}
                 </div>
 
-                <div className="text-sm text-blue-400 font-medium flex items-center gap-2">
+                <div className="text-sm text-blue-600 font-medium flex items-center gap-2">
                   <Play className="w-4 h-4" />
                   Cliquez pour voir les séances
                 </div>
@@ -268,10 +268,10 @@ const TrainingPlans = () => {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-300">
-            Êtes-vous sûr de vouloir supprimer le plan <span className="font-bold text-white">"{planToDelete?.name}"</span> ?
+          <p className="text-gray-700">
+            Êtes-vous sûr de vouloir supprimer le plan <span className="font-bold text-gray-900">"{planToDelete?.name}"</span> ?
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-600">
             Cette action supprimera toutes les séances associées.
           </p>
           <div className="flex gap-3 justify-end pt-4">
