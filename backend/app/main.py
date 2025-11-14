@@ -4,6 +4,9 @@ from .core.config import settings
 from .core.database import engine, Base
 from .api.routes import auth, users, goals, training_plans, workouts, routes
 
+# Import all models to register them with SQLAlchemy
+from .models import User, Goal, TrainingPlan, Workout, Route
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
